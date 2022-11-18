@@ -5,7 +5,8 @@ export class Button extends Phaser.GameObjects.Sprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    texture: string | Phaser.Textures.Texture
+    texture: string | Phaser.Textures.Texture,
+    callback?: () => void
   ) {
     super(scene, x, y, texture);
 
@@ -35,6 +36,8 @@ export class Button extends Phaser.GameObjects.Sprite {
         duration,
       });
     });
+
+    callback && image.addListener("pointerdown", callback);
   }
 
   update(...args: any[]): void {}
