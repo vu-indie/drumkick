@@ -40,36 +40,32 @@ class Game extends Phaser.Scene {
   }
 
   create(): void {
+    const h = this.game.renderer.height;
+
     this.add.sprite(100, 100, "logo").setOrigin(0);
 
-    const playButton = new Button(
-      this,
-      100,
-      this.game.renderer.height - 120,
-      "play",
-      () => {
-        this.scene
-          .launch("player")
-          .launch("track", {
-            hits: [
-              { id: 0, noteTime: 2.5, type: NoteType.NOTE1 },
-              { id: 1, noteTime: 4.4, type: NoteType.NOTE2 },
-              { id: 2, noteTime: 4.8, type: NoteType.NOTE1 },
-            ],
-          })
-          .remove();
-      }
-    );
-
-    const editorButton = new Button(
-      this,
-      210,
-      this.game.renderer.height - 120,
-      "editor"
-    );
+    new Button(this, 100, h - 120, "play", () => this.goToPlayer());
+    new Button(this, 210, h - 120, "editor");
   }
 
   update(): void {}
+
+  private goToPlayer() {
+    this.scene
+      .launch("player")
+      .launch("track", {
+        hits: [
+          { index: 0, noteTime: 2.5, type: NoteType.NOTE1 },
+          { index: 1, noteTime: 4.4, type: NoteType.NOTE1 },
+          { index: 2, noteTime: 4.8, type: NoteType.NOTE1 },
+          { index: 3, noteTime: 6.1, type: NoteType.NOTE1 },
+          { index: 4, noteTime: 6.4, type: NoteType.NOTE2 },
+          { index: 5, noteTime: 6.7, type: NoteType.NOTE2 },
+          { index: 6, noteTime: 7.0, type: NoteType.NOTE2 },
+        ],
+      })
+      .remove();
+  }
 }
 
 export default Game;
