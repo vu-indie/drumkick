@@ -9,9 +9,18 @@ import "./style.css";
 const config = {
   type: Phaser.AUTO,
   backgroundColor: "#fff",
-  width: 1024,
-  height: 640,
+  width: screen.width,
+  height: screen.height,
+  scale: {
+    mode: Phaser.Scale.RESIZE,
+    parent: "canvas",
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
   scene: [Game, Player, Track],
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+// document.onload = () => {
+//   game.scale.startFullscreen();
+// };

@@ -37,6 +37,8 @@ class Game extends Phaser.Scene {
   }
 
   preload(): void {
+    // this.scale.startFullscreen();
+
     this.load.image("logo", logo);
     this.load.image("play", play);
     this.load.image("editor", editor);
@@ -61,6 +63,8 @@ class Game extends Phaser.Scene {
 
     new Button(this, 100, h - 120, "play", () => this.goToPlayer());
     new Button(this, 210, h - 120, "editor");
+
+    // this.scale.startFullscreen();
   }
 
   update(): void {}

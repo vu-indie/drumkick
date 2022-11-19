@@ -21,6 +21,9 @@ export class Track extends Phaser.Scene {
   soundHit: Phaser.Sound.BaseSound;
   soundDrum: Phaser.Sound.BaseSound;
 
+  currentNote: Phaser.GameObjects.Sprite;
+  firstChartNote: THitEvent;
+
   constructor() {
     super("track");
   }
@@ -37,10 +40,17 @@ export class Track extends Phaser.Scene {
     this.noteIndex = 0;
     this.chartIndex = 0;
     this.chart = [];
+
     // this.events.shutdown();
 
-    this.add.sprite(this.renderer.width / 2, 500, "lane");
-    this.hit = this.add.sprite(120, 500, "hit");
+    this.add.tileSprite(
+      0,
+      this.renderer.height - 100,
+      this.renderer.width * 2,
+      107,
+      "lane"
+    );
+    this.hit = this.add.sprite(120, this.renderer.height - 100, "hit");
     this.chart = data.hits as THitEvent[];
 
     this.keyZ = this.input.keyboard.addKey("Z");
@@ -74,6 +84,50 @@ export class Track extends Phaser.Scene {
 
       this.music.stop();
     });
+
+    this.input.on(
+      "pointerdown",
+      function (pointer: any) {
+        console.log("down");
+
+        const center = this.renderer.width / 2;
+        if (pointer.x < center) {
+          this.soundDrum.play();
+          this.hitCircle();
+          if (
+            this.currentNote &&
+            this.currentNote.x > this.hit.x - 32 &&
+            this.currentNote.x < this.hit.x + 32
+          ) {
+            if (this.firstChartNote.type === NoteType.NOTE1) {
+              this.addScore(this.currentNote.x, this.hit.x);
+              this.completeNote(this.currentNote);
+            } else {
+              this.missNote(this.currentNote);
+            }
+            this.noteIndex++;
+          }
+        }
+
+        if (pointer.x > center) {
+          this.soundHit.play();
+          this.hitCircle();
+          if (
+            this.currentNote &&
+            this.currentNote.x > this.hit.x - 30 &&
+            this.currentNote.x < this.hit.x + 30
+          ) {
+            if (this.firstChartNote.type === NoteType.NOTE2) {
+              this.completeNote(this.currentNote);
+            } else {
+              this.missNote(this.currentNote);
+            }
+            this.noteIndex++;
+          }
+        }
+      },
+      this
+    );
   }
 
   update(time: number, delta: number): void {
@@ -84,7 +138,11 @@ export class Track extends Phaser.Scene {
 
     if (Math.abs(chartNote.startTime - now) < 10) {
       const note = this.add
-        .sprite(this.renderer.width - 40, 500, chartNote.type)
+        .sprite(
+          this.renderer.width - 40,
+          this.renderer.height - 100,
+          chartNote.type
+        )
         .setName(`n${chartNote.index}`)
         .setScale(0)
         .setAlpha(0);
@@ -111,8 +169,8 @@ export class Track extends Phaser.Scene {
     });
 
     // Get a first note from chart
-    const currentNote = this.createdNotes[this.noteIndex];
-    const firstChartNote = this.chart[this.noteIndex];
+    this.currentNote = this.createdNotes[this.noteIndex];
+    this.firstChartNote = this.chart[this.noteIndex];
 
     if (this.createdNotes[0] && this.createdNotes[0].x < this.hit.x + 64) {
       this.events.emit("startPlaying");
@@ -120,26 +178,26 @@ export class Track extends Phaser.Scene {
 
     // ------------- HACK
     // if (
-    //   currentNote &&
-    //   currentNote.x > this.hit.x - 8 &&
-    //   currentNote.x < this.hit.x + 8
+    //   this.currentNote &&
+    //   this.currentNote.x > this.hit.x - 8 &&
+    //   this.currentNote.x < this.hit.x + 8
     // ) {
-    //   if (firstChartNote && firstChartNote?.type === NoteType.NOTE1) {
+    //   if (this.firstChartNote && this.firstChartNote?.type === NoteType.NOTE1) {
     //     this.soundDrum.play();
     //   }
 
-    //   if (firstChartNote && firstChartNote?.type === NoteType.NOTE2) {
+    //   if (this.firstChartNote && this.firstChartNote?.type === NoteType.NOTE2) {
     //     this.soundHit.play();
     //   }
     //   this.hitCircle();
-    //   this.addScore(currentNote.x, this.hit.x);
-    //   this.completeNote(currentNote);
+    //   this.addScore(this.currentNote.x, this.hit.x);
+    //   this.completeNote(this.currentNote);
     //   this.noteIndex++;
     // }
 
     // Missed note
-    if (currentNote && currentNote.x < this.hit.x - 60) {
-      this.missNote(currentNote);
+    if (this.currentNote && this.currentNote.x < this.hit.x - 60) {
+      this.missNote(this.currentNote);
 
       this.noteIndex++;
     }
@@ -148,15 +206,15 @@ export class Track extends Phaser.Scene {
       this.soundDrum.play();
       this.hitCircle();
       if (
-        currentNote &&
-        currentNote.x > this.hit.x - 32 &&
-        currentNote.x < this.hit.x + 32
+        this.currentNote &&
+        this.currentNote.x > this.hit.x - 32 &&
+        this.currentNote.x < this.hit.x + 32
       ) {
-        if (firstChartNote.type === NoteType.NOTE1) {
-          this.addScore(currentNote.x, this.hit.x);
-          this.completeNote(currentNote);
+        if (this.firstChartNote.type === NoteType.NOTE1) {
+          this.addScore(this.currentNote.x, this.hit.x);
+          this.completeNote(this.currentNote);
         } else {
-          this.missNote(currentNote);
+          this.missNote(this.currentNote);
         }
         this.noteIndex++;
       }
@@ -166,21 +224,21 @@ export class Track extends Phaser.Scene {
       this.soundHit.play();
       this.hitCircle();
       if (
-        currentNote &&
-        currentNote.x > this.hit.x - 30 &&
-        currentNote.x < this.hit.x + 30
+        this.currentNote &&
+        this.currentNote.x > this.hit.x - 30 &&
+        this.currentNote.x < this.hit.x + 30
       ) {
-        if (firstChartNote.type === NoteType.NOTE2) {
-          this.completeNote(currentNote);
+        if (this.firstChartNote.type === NoteType.NOTE2) {
+          this.completeNote(this.currentNote);
         } else {
-          this.missNote(currentNote);
+          this.missNote(this.currentNote);
         }
         this.noteIndex++;
       }
     };
 
     // this.debugText.setText(`
-    //   ${currentNote?.name}\n
+    //   ${this.currentNote?.name}\n
 
     // `);
   }
@@ -199,7 +257,7 @@ export class Track extends Phaser.Scene {
   private completeNote(note: Phaser.GameObjects.Sprite) {
     this.tweens.add({
       targets: note,
-      y: 400,
+      y: note.y - 200,
       x: note.x,
       alpha: 0,
       ease: "Sine.easeInOut",
