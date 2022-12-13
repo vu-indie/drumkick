@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Drum from "../objects/drum.object";
+import Chart from "../objects/Chart.object";
 
 class Menu extends Phaser.Scene {
   constructor() {
@@ -18,16 +19,16 @@ class Menu extends Phaser.Scene {
 
     this.add.image(cx, cy - 100, "logo").setScale(0.5);
 
-    this.add
-      .tileSprite(0, cy + 100, this.renderer.width, 100, "chart")
-      .setOrigin(0);
-    // this.add.sprite(100, cy + 150, "circle");
-    this.add.sprite(500, cy + 150, "hitBlue");
+    new Chart({
+      scene: this,
+      y: cy + 150,
+      width: this.renderer.width,
+    });
 
     new Drum({
       scene: this,
       x: 100,
-      y: cy + 150,
+      y: 150,
       hitKey: "A",
       snareKey: "S",
     });
