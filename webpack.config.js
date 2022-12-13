@@ -48,10 +48,6 @@ module.exports = {
         test: ASSET_REGEX,
         type: "asset/resource",
       },
-      // {
-      //   test: /\.xml$/i,
-      //   use: ["xml-loader"],
-      // },
     ],
   },
   resolve: {

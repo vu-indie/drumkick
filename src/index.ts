@@ -1,8 +1,7 @@
 import * as Phaser from "phaser";
 
-import Game from "./game/game";
-import Player from "./game/player";
-import { Track } from "./game/track";
+import Menu from "./scenes/menu.scene";
+import Preload from "./scenes/preload.scene";
 
 import "./style.css";
 
@@ -16,11 +15,7 @@ const config = {
     parent: "canvas",
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [Game, Player, Track],
+  scene: [Preload, Menu],
 };
 
-const game = new Phaser.Game(config);
-
-// document.onload = () => {
-//   game.scale.startFullscreen();
-// };
+new Phaser.Game(config);
