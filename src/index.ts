@@ -7,7 +7,7 @@ import "./style.css";
 
 const config = {
   type: Phaser.AUTO,
-  backgroundColor: "#fff",
+  backgroundColor: "#000",
   width: screen.width,
   height: screen.height,
   scale: {

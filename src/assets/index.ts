@@ -1,7 +1,9 @@
 import logo from "./logo.png";
+import background from "./background.jpg";
 
 export const images = {
   logo,
+  background,
 };
 
 export const sounds = {};
