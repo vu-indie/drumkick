@@ -8,11 +8,11 @@ import "./style.css";
 const config = {
   type: Phaser.AUTO,
   backgroundColor: "#000",
-  width: screen.width,
-  height: screen.height,
+  width: 800,
+  height: 480,
   scale: {
     mode: Phaser.Scale.RESIZE,
-    parent: "canvas",
+    parent: "app",
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   scene: [Preload, Menu],

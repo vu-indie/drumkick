@@ -23,6 +23,11 @@ declare module "*.mp3" {
   export = value;
 }
 
+declare module "*.wav" {
+  const value: any;
+  export = value;
+}
+
 declare module "*.ogg" {
   const value: any;
   export = value;
