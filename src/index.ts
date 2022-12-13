@@ -1,7 +1,9 @@
 import * as Phaser from "phaser";
 
-import Menu from "./scenes/menu.scene";
 import Preload from "./scenes/preload.scene";
+import Menu from "./scenes/menu.scene";
+import Catalog from "./scenes/catalog.scene";
+import Game from "./scenes/game.scene";
 
 import "./style.css";
 
@@ -15,7 +17,7 @@ const config = {
     parent: "app",
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [Preload, Menu],
+  scene: [Preload, Menu, Catalog, Game],
 };
 
 new Phaser.Game(config);

@@ -1,23 +1,27 @@
 import Phaser from "phaser";
 import Drum from "../objects/drum.object";
 import Chart from "../objects/Chart.object";
+import Background from "../objects/background.object";
 
 class Menu extends Phaser.Scene {
+  background: Background;
+
   constructor() {
     super("Menu");
   }
 
   create(): void {
+    // this.sound.play("theme");
+
     const cx = this.renderer.width / 2;
     const cy = this.renderer.height / 2;
 
-    this.add
-      .image(0, 0, "background")
-      .setOrigin(0)
-      .setDisplaySize(this.renderer.width, this.renderer.height)
-      .setAlpha(0.5);
-
-    this.add.image(cx, cy - 100, "logo").setScale(0.5);
+    this.background = new Background({
+      scene: this,
+      x: cx,
+      y: cy,
+      texture: "background",
+    });
 
     new Chart({
       scene: this,
@@ -34,7 +38,9 @@ class Menu extends Phaser.Scene {
     });
   }
 
-  update(): void {}
+  update(): void {
+    this.background.parallax();
+  }
 }
 
 export default Menu;

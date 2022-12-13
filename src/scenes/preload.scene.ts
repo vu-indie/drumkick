@@ -25,6 +25,7 @@ class Preload extends Phaser.Scene {
     // --- loading sound assets
     this.load.audio("snare", assets.sounds.drumSnare);
     this.load.audio("hit", assets.sounds.drumHit);
+    // this.load.audio("theme", assets.music.theme);
 
     // this.load.bitmapFont("montserrat", font, fontXML);
 

@@ -8,6 +8,7 @@ import circle from "./circle.png";
 import drumHit from "./drum-hit.wav";
 import drumSnare from "./drum-snare.wav";
 
+
 export const images = {
   logo,
   background,
